@@ -14,13 +14,18 @@ func getBaseName(fullPath string) string {
 
 func fileString(file converters.FileProperties) string {
 	// We color it with the first color of the tag
-	coloredKey := strings.ToLower(file.Tags[0])
+	var coloredBulletArray []string
 
-	colors := ColorOfTag[coloredKey]
+	for i := range file.Tags {
+		tag := strings.ToLower(file.Tags[i])
+		coloredBulletArray = append(coloredBulletArray, ColorOfTag[tag][0], "●")
+	}
+
+	joinedBullets := strings.Join(coloredBulletArray, "")
 
 	baseName := getBaseName(file.Name)
 
-	displayString := []string{colors[0], "● ", baseName, Reset}
+	displayString := []string{joinedBullets, " ", Reset, baseName}
 
 	return strings.Join(displayString, "")
 
