@@ -3,6 +3,7 @@ package converters
 //#cgo CFLAGS: -x objective-c
 // #cgo LDFLAGS: -framework Foundation
 // #include "../bridge/bridge.m"
+// #include "../bridge/ext/NSTaggerURL.m"
 import "C"
 import "unsafe"
 

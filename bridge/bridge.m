@@ -7,22 +7,7 @@
 
 #import <Foundation/Foundation.h>
 #include "bridge.h"
-
-@interface NSURL (Tagger)
-
-- (NSArray *) GetTags;
-
-@end
-
-@implementation NSURL (Tagger)
-- (NSArray *) GetTags
-{
-    NSArray *currentTags = nil;
-    NSError *tagError = nil;
-    [self getResourceValue:&currentTags forKey:NSURLTagNamesKey error:&tagError];
-    return currentTags;
-}
-@end
+#include "ext/NSTaggerURL.h"
 
 const char*
 NSStringToCString(NSString *s) {
@@ -46,7 +31,7 @@ NSArrayLen(NSArray *arrWithoutDetermined) {
 }
 
 const void*
-NSArrayItem(NSArray *arrWithDetermined, unsigned long i) {
+NSArrayItem(NSArray* arrWithDetermined, unsigned long i) {
     if (arrWithDetermined== NULL) { return NULL; }
 
     return [arrWithDetermined objectAtIndex:i];
