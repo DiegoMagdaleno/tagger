@@ -13,6 +13,7 @@ import (
 )
 
 var targetTag string
+var exclusive bool
 
 var rootCmd = &cobra.Command{
 	Use:   "tagger",
@@ -30,13 +31,23 @@ var rootCmd = &cobra.Command{
 		if err != nil {
 			if strings.Contains(err.Error(), "no such file or directory") {
 				fmt.Fprintln(os.Stderr, "No such file or directory")
+				os.Exit(1)
 			}
 		}
 
+		if targetTag == "all" && exclusive {
+			fmt.Fprintln(os.Stderr, "Can't specify exclussivness without specifing a tag to search for exclusively")
+			os.Exit(1)
+		}
+
 		initialFileList := converters.GetFinalArrayOfFiles(targetDirectory)
-		if targetTag != "all" {
+
+		switch {
+		case targetTag != "all" && !exclusive:
 			fileList = lib.SearchForFilesWithTags(initialFileList, targetTag)
-		} else {
+		case targetTag != "all" && exclusive:
+			fileList = lib.SearchForFilesWithTagsExclusively(initialFileList, targetTag)
+		default:
 			fileList = initialFileList
 		}
 
@@ -46,6 +57,7 @@ var rootCmd = &cobra.Command{
 
 func Execute() {
 	rootCmd.Flags().StringVarP(&targetTag, "search", "s", "all", "Allows you to search for files with a specific tag")
+	rootCmd.Flags().BoolVarP(&exclusive, "exclusive", "e", false, "Only show files that contain a specific tag exclusively")
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)

@@ -37,3 +37,17 @@ func SearchForFilesWithTags(files []converters.FileProperties, tag string) []con
 	}
 	return filesEditable
 }
+
+func SearchForFilesWithTagsExclusively(files []converters.FileProperties, tag string) []converters.FileProperties {
+	var filesEditable []converters.FileProperties
+	for i := range files {
+		tags := files[i].Tags
+		for range tags {
+			_, found := findFileProperties(filesEditable, files[i])
+			if stringInSlice(tag, tags) && !found && !(len(files[i].Tags) > 1) {
+				filesEditable = append(filesEditable, files[i])
+			}
+		}
+	}
+	return filesEditable
+}
