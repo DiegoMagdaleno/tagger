@@ -10,7 +10,7 @@ func getLastItem(allPaths []string) []string {
 	var relativePaths []string
 	for i := range allPaths {
 		splitedPath := strings.Split(allPaths[i], "/")
-		relativePaths = append(relativePaths, splitedPath[len(splitedPath)-1])
+		relativePaths = append(relativePaths, "\u2B24 "+splitedPath[len(splitedPath)-1])
 	}
 	return relativePaths
 }
