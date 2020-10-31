@@ -12,6 +12,10 @@
 
 #include <Foundation/Foundation.h>
 
+
+// FileProoperties is an NSObject, describes a file
+// name -> path to the file
+// tags -> Name of the tags that are contained
 @interface FileProperties : NSObject
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSArray *tags;
@@ -34,6 +38,7 @@
 }
 @end
 
+// TFFileProperties represents an struct of the file properties
 typedef struct _TGFileProperties {
     NSString *name;
     NSArray *tags;
@@ -47,6 +52,7 @@ filePropertiesData(FileProperties *file){
     return filePropertiesData;
 }
 
+// Returns raw C string value 
 const char*
 NSStringToCString(NSString *s) {
     if (s == NULL) {return NULL; }
@@ -55,12 +61,14 @@ NSStringToCString(NSString *s) {
     return CStr;
 }
 
+// Returns raw int value 
 int
 NSNumberToInt(NSNumber *i) {
     if (i == NULL ) {return 0;}
     return i.intValue;
 }
 
+// Returns lenght of array as long value 
 unsigned long
 NSArrayLen(NSArray *arrWithoutDetermined) {
     if (arrWithoutDetermined == NULL) { return 0; }
@@ -68,6 +76,7 @@ NSArrayLen(NSArray *arrWithoutDetermined) {
     return arrWithoutDetermined.count;
 }
 
+// Helper to move from C array to Go arrays
 const void*
 NSArrayItem(NSArray* arrWithDetermined, unsigned long i) {
     if (arrWithDetermined== NULL) { return NULL; }
@@ -75,6 +84,8 @@ NSArrayItem(NSArray* arrWithDetermined, unsigned long i) {
     return [arrWithDetermined objectAtIndex:i];
 }
 
+// Lists all files with tags at a collection of paths, that are later converted
+// into NSURL
 NSArray* listFilesWithTagsAtNSURL(NSArray* path) {
     NSMutableArray *filePreliminary = [NSMutableArray array];
 
@@ -88,6 +99,7 @@ NSArray* listFilesWithTagsAtNSURL(NSArray* path) {
     return filePreliminary;
 }
 
+// Converts a given dictionary to a FileProperties object
 NSArray*
 fromDictionaryToFilePropertiesArray(NSDictionary *targetDict) {
     NSMutableArray *objectList = [NSMutableArray array];

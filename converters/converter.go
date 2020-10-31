@@ -7,19 +7,32 @@ package converters
 import "C"
 import "unsafe"
 
+// NSStringToCString handles the conversion from an NSString object to a CString variable.
 func NSStringToCString(s *C.NSString) *C.char { return C.NSStringToCString(s) }
 
+// NSStringToGoString handles the conversion from NSString to our own GoString session
 func NSStringToGoString(s *C.NSString) string { return C.GoString(NSStringToCString(s)) }
 
+// GoInt handles the conversion from NSNumber to Go's int
 func GoInt(i *C.NSNumber) int { return int(C.NSNumberToInt(i)) }
 
+// GetNSArrayLenght returns the number of elements stored inside an array as an uint
 func GetNSArrayLenght(arr *C.NSArray) uint { return uint(C.NSArrayLen(arr)) }
 
+// GetNSArrayItem returns certain value at an index
 func GetNSArrayItem(arr *C.NSArray, i uint) unsafe.Pointer {
 	return C.NSArrayItem(arr, C.ulong(i))
 }
 
-func fromTGFilePropertiesToFileProperties(filePropertiesPtr *C.FileProperties) fileProperties {
+// fromTGFilePropertiesToFileProperties
+// Handles the conversion from the Obj-C struct TGFileProperties to our own fileProperties
+// type.
+// How it works:
+// First we get a TGFileProperties from the function filePropertiesData in the C file (This function is documented in that file)
+// We convert the name to a Go name
+// The rest of the code until filePropertiesGo variable declaration, converts the array in each object to a GoArray
+// finally we init our own version of this object and we return it
+func fromTGFilePropertiesToFileProperties(filePropertiesPtr *C.FileProperties) FileProperties {
 
 	var tags []string
 
@@ -35,7 +48,7 @@ func fromTGFilePropertiesToFileProperties(filePropertiesPtr *C.FileProperties) f
 		tags = append(tags, tagString)
 	}
 
-	filePropertiesGo := fileProperties{
+	filePropertiesGo := FileProperties{
 		Name: name,
 		Tags: tags,
 	}
@@ -43,8 +56,9 @@ func fromTGFilePropertiesToFileProperties(filePropertiesPtr *C.FileProperties) f
 	return filePropertiesGo
 }
 
-func GoArrayWithFilePropertyObjects(arr *C.NSArray) []fileProperties {
-	var files []fileProperties
+// GoArrayWithFilePropertyObjects translates the returned array from Obj-C to a Go array containing our fileProperties objects
+func GoArrayWithFilePropertyObjects(arr *C.NSArray) []FileProperties {
+	var files []FileProperties
 	lenght := GetNSArrayLenght(arr)
 
 	for i := uint(0); i < lenght; i++ {
@@ -55,6 +69,7 @@ func GoArrayWithFilePropertyObjects(arr *C.NSArray) []fileProperties {
 	return files
 }
 
-func GetFinalArrayOfFiles(path string) []fileProperties {
+// GetFinalArrayOfFiles returns the summary of all the process done before.
+func GetFinalArrayOfFiles(path string) []FileProperties {
 	return GoArrayWithFilePropertyObjects(C.getFilesWithCertainMacOSTag(C.CString(path)))
 }

@@ -1,6 +1,6 @@
 package converters
 
-type fileProperties struct {
+type FileProperties struct {
 	Name string
 	Tags []string
 }
