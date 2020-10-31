@@ -1,11 +1,7 @@
 package main
 
-import (
-	"fmt"
-
-	"github.com/diegomagdaleno/tagger/converters"
-)
+import "github.com/diegomagdaleno/tagger/cmd"
 
 func main() {
-	fmt.Println(converters.GetFinalArrayOfFiles("/Users/me/Documents/Screenshots"))
+	cmd.Execute()
 }

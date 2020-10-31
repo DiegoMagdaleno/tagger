@@ -4,18 +4,39 @@ import (
 	"strings"
 
 	"github.com/acarl005/textcol"
+	"github.com/diegomagdaleno/tagger/converters"
 )
 
-func getLastItem(allPaths []string) []string {
-	var relativePaths []string
-	for i := range allPaths {
-		splitedPath := strings.Split(allPaths[i], "/")
-		relativePaths = append(relativePaths, "\u2B24 "+splitedPath[len(splitedPath)-1])
-	}
-	return relativePaths
+func getBaseName(fullPath string) string {
+	splitPath := strings.Split(fullPath, "/")
+	return splitPath[len(splitPath)-1]
 }
 
-func InitialDisplay(files []string) {
-	itemsTarget := getLastItem(files)
+func fileString(file converters.FileProperties) string {
+	// We color it with the first color of the tag
+	coloredKey := strings.ToLower(file.Tags[0])
+
+	colors := ColorOfTag[coloredKey]
+
+	baseName := getBaseName(file.Name)
+
+	displayString := []string{colors[0], "● ", baseName, Reset}
+
+	return strings.Join(displayString, "")
+
+}
+
+func formatedElements(elements []converters.FileProperties) []string {
+	var formattedStrings []string
+
+	for i := range elements {
+		stringToAppend := fileString(elements[i])
+		formattedStrings = append(formattedStrings, stringToAppend)
+	}
+	return formattedStrings
+}
+
+func InitialDisplay(allElements []converters.FileProperties) {
+	itemsTarget := formatedElements(allElements)
 	textcol.PrintColumns(&itemsTarget, 5)
 }

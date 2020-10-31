@@ -10,6 +10,8 @@ func foregroundColor(code int) string {
 	return strings.Join(colored, "")
 }
 
+const Reset = "\x1b[0m"
+
 var (
 	ColorOfTag = map[string][2]string{
 		"orange": [2]string{foregroundColor(166)},
