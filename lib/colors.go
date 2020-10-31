@@ -17,8 +17,8 @@ var (
 		"orange": [2]string{foregroundColor(166)},
 		"red":    [2]string{foregroundColor(160)},
 		"yellow": [2]string{foregroundColor(226)},
-		"green":  [2]string{foregroundColor(040)},
-		"blue":   [2]string{foregroundColor(033)},
+		"green":  [2]string{foregroundColor(118)},
+		"blue":   [2]string{foregroundColor(81)},
 		"purple": [2]string{foregroundColor(129)},
 		"grey":   [2]string{foregroundColor(240)},
 	}
