@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/diegomagdaleno/tagger/converters"
 
@@ -24,6 +25,14 @@ var rootCmd = &cobra.Command{
 			}
 			return args[0]
 		}(args)
+
+		_, err := os.Stat(targetDirectory)
+		if err != nil {
+			if strings.Contains(err.Error(), "no such file or directory") {
+				fmt.Fprintln(os.Stderr, "No such file or directory")
+			}
+		}
+
 		initialFileList := converters.GetFinalArrayOfFiles(targetDirectory)
 		if targetTag != "all" {
 			fileList = lib.SearchForFilesWithTags(initialFileList, targetTag)

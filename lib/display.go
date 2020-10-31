@@ -43,5 +43,5 @@ func formatedElements(elements []converters.FileProperties) []string {
 
 func InitialDisplay(allElements []converters.FileProperties) {
 	itemsTarget := formatedElements(allElements)
-	textcol.PrintColumns(&itemsTarget, 5)
+	textcol.PrintColumns(&itemsTarget, 2)
 }
