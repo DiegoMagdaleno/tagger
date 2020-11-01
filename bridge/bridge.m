@@ -122,6 +122,13 @@ getFilesWithCertainMacOSTag(char const*  pathRaw) {
 
     NSMutableDictionary *mappedFiles = [NSMutableDictionary dictionary];
 
+    BOOL isDir;
+    NSArray *folders;
+
+    NSFileManager *fm = [NSFileManager defaultManager];
+
+    [fm fileExistsAtPath:path isDirectory:&isDir];
+
 
     /*
      * Stage 1:
@@ -129,9 +136,13 @@ getFilesWithCertainMacOSTag(char const*  pathRaw) {
      * an NSURL
      */
     NSURL *directoryURL = [[NSURL alloc] initFileURLWithPath:path];
-    
-    NSArray *folders = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:directoryURL includingPropertiesForKeys:NULL options:NSDirectoryEnumerationSkipsHiddenFiles error:NULL];
-    
+
+    if (!isDir) {
+        folders = @[directoryURL];
+    } else {
+        folders = [fm contentsOfDirectoryAtURL:directoryURL includingPropertiesForKeys:NULL options:NSDirectoryEnumerationSkipsHiddenFiles error:NULL];
+    }
+
     
     for (id eachPathAsURL in folders) {
         NSURL *target = [NSURL fileURLWithPath:[eachPathAsURL path]];
