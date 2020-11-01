@@ -14,6 +14,7 @@ import (
 
 var targetTag string
 var exclusive bool
+var noPretty bool
 
 var rootCmd = &cobra.Command{
 	Use:   "tagger",
@@ -51,13 +52,19 @@ var rootCmd = &cobra.Command{
 			fileList = initialFileList
 		}
 
-		lib.InitialDisplay(fileList)
+		if noPretty {
+			lib.RawDisplay(fileList)
+		} else {
+			lib.InitialDisplay(fileList)
+		}
+
 	},
 }
 
 func Execute() {
 	rootCmd.Flags().StringVarP(&targetTag, "search", "s", "all", "Allows you to search for files with a specific tag")
 	rootCmd.Flags().BoolVarP(&exclusive, "exclusive", "e", false, "Only show files that contain a specific tag exclusively")
+	rootCmd.Flags().BoolVarP(&noPretty, "no-pretty", "n", false, "Disables file pretty printing and prints absolue paths")
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)

@@ -45,3 +45,11 @@ func InitialDisplay(allElements []converters.FileProperties) {
 	itemsTarget := formatedElements(allElements)
 	textcol.PrintColumns(&itemsTarget, 2)
 }
+
+func RawDisplay(elements []converters.FileProperties) {
+	var rawStrings []string
+	for i := range elements {
+		rawStrings = append(rawStrings, elements[i].Name)
+	}
+	textcol.PrintColumns(&rawStrings, 2)
+}
