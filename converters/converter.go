@@ -5,6 +5,7 @@ package converters
 // #include "../bridge/bridge.m"
 // #include <libtags/NSURLTagger.h>
 // #include <libtags/GetHelpers.h>
+// #include <libtags/TagComponents.h>
 import "C"
 import "unsafe"
 
@@ -25,6 +26,21 @@ func GetNSArrayItem(arr *C.NSArray, i uint) unsafe.Pointer {
 	return C.NSArrayItem(arr, C.ulong(i))
 }
 
+func fromTGTagComponentsToTagComponets(tagComponentsPtr *C.TagComponent) TagComponents {
+
+	tagComponentsFromC := *C.tagComponentsData(tagComponentsPtr)
+
+	name := NSStringToGoString(tagComponentsFromC.name)
+	color := NSStringToGoString(tagComponentsFromC.color)
+
+	TagComponentGo := TagComponents{
+		Name:  name,
+		Color: color,
+	}
+
+	return TagComponentGo
+}
+
 // fromTGFilePropertiesToFileProperties
 // Handles the conversion from the Obj-C struct TGFileProperties to our own fileProperties
 // type.
@@ -35,7 +51,7 @@ func GetNSArrayItem(arr *C.NSArray, i uint) unsafe.Pointer {
 // finally we init our own version of this object and we return it
 func fromTGFilePropertiesToFileProperties(filePropertiesPtr *C.FileProperties) FileProperties {
 
-	var tags []string
+	var tags []TagComponents
 
 	filePropertiesFromC := *C.filePropertiesData(filePropertiesPtr)
 
@@ -44,8 +60,8 @@ func fromTGFilePropertiesToFileProperties(filePropertiesPtr *C.FileProperties) F
 	lenght := GetNSArrayLenght(filePropertiesFromC.tags)
 
 	for i := uint(0); i < lenght; i++ {
-		tag := (*C.NSString)(GetNSArrayItem(filePropertiesFromC.tags, i))
-		tagString := NSStringToGoString(tag)
+		tag := (*C.TagComponent)(GetNSArrayItem(filePropertiesFromC.tags, i))
+		tagString := fromTGTagComponentsToTagComponets(tag)
 		tags = append(tags, tagString)
 	}
 

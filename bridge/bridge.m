@@ -8,18 +8,32 @@
 #import <Foundation/Foundation.h>
 #include "bridge.h"
 #include "libtags/FileProperties.h"
-
+#include "libtags/TagComponents.h"
 // TFFileProperties represents an struct of the file properties
 typedef struct _TGFileProperties {
     NSString *name;
     NSArray *tags;
 } TGFileProperties;
 
+typedef struct _TGTagComponents {
+    NSString *name;
+    NSString *color;
+} TGTagComponents;
+
+
+const TGTagComponents*
+tagComponentsData(TagComponent *tag){
+    TGTagComponents *tagComponentData = malloc(sizeof(TGTagComponents));
+    tagComponentData->name = tag.getName;
+    tagComponentData->color = tag.getColorTagName;
+    return tagComponentData;
+}
+
 const TGFileProperties*
 filePropertiesData(FileProperties *file){
     TGFileProperties *filePropertiesData = malloc(sizeof(TGFileProperties));
     filePropertiesData->name = file.name;
-    filePropertiesData->tags = file.tags;
+    filePropertiesData->tags = file.getTagsObject;
     return filePropertiesData;
 }
 
