@@ -1,9 +1,10 @@
 package converters
 
-//#cgo CFLAGS: -x objective-c
-// #cgo LDFLAGS: -framework Foundation
+//#cgo CFLAGS: -x objective-c -I /usr/local/include
+// #cgo LDFLAGS: -framework Foundation -L/usr/local/lib -llibtags
 // #include "../bridge/bridge.m"
-// #include "../bridge/ext/NSTaggerURL.m"
+// #include <libtags/NSURLTagger.h>
+// #include <libtags/GetHelpers.h>
 import "C"
 import "unsafe"
 
@@ -69,7 +70,6 @@ func GoArrayWithFilePropertyObjects(arr *C.NSArray) []FileProperties {
 	return files
 }
 
-// GetFinalArrayOfFiles returns the summary of all the process done before.
 func GetFinalArrayOfFiles(path string) []FileProperties {
-	return GoArrayWithFilePropertyObjects(C.getFilesWithCertainMacOSTag(C.CString(path)))
+	return GoArrayWithFilePropertyObjects(C.getTagsOfFile(C.CString(path)))
 }
