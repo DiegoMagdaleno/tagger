@@ -1,7 +1,7 @@
 package converters
 
 //#cgo CFLAGS: -x objective-c -I /usr/local/include
-// #cgo LDFLAGS: -framework Foundation -L/usr/local/lib -llibtags
+// #cgo LDFLAGS: -framework Foundation -L/usr/local/lib -ltags
 // #include "../bridge/bridge.m"
 // #include <libtags/NSURLTagger.h>
 // #include <libtags/GetHelpers.h>
