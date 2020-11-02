@@ -17,7 +17,7 @@ func fileString(file converters.FileProperties) string {
 	var coloredBulletArray []string
 
 	for i := range file.Tags {
-		tag := strings.ToLower(file.Tags[i])
+		tag := strings.ToLower(file.Tags[i].Color)
 		coloredBulletArray = append(coloredBulletArray, ColorOfTag[tag][0], "●")
 	}
 

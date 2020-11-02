@@ -24,10 +24,21 @@ func findFileProperties(slice []converters.FileProperties, val converters.FilePr
 	return -1, false
 }
 
+func getTagNameStringsArray(tags []converters.TagComponents) []string {
+	var tagStrings []string
+
+	for i := range tags {
+		tagStrings = append(tagStrings, tags[i].Name)
+	}
+
+	return tagStrings
+}
+
 func SearchForFilesWithTags(files []converters.FileProperties, tag string) []converters.FileProperties {
 	var filesEditable []converters.FileProperties
 	for i := range files {
-		tags := files[i].Tags
+		tagsStruct := files[i].Tags
+		tags := getTagNameStringsArray(tagsStruct)
 		for range tags {
 			_, found := findFileProperties(filesEditable, files[i])
 			if stringInSlice(tag, tags) && !found {
@@ -41,7 +52,8 @@ func SearchForFilesWithTags(files []converters.FileProperties, tag string) []con
 func SearchForFilesWithTagsExclusively(files []converters.FileProperties, tag string) []converters.FileProperties {
 	var filesEditable []converters.FileProperties
 	for i := range files {
-		tags := files[i].Tags
+		tagsStruct := files[i].Tags
+		tags := getTagNameStringsArray(tagsStruct)
 		for range tags {
 			_, found := findFileProperties(filesEditable, files[i])
 			if stringInSlice(tag, tags) && !found && !(len(files[i].Tags) > 1) {
