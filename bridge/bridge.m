@@ -69,4 +69,9 @@ NSArrayItem(NSArray* arrWithDetermined, unsigned long i) {
     return [arrWithDetermined objectAtIndex:i];
 }
 
+const NSString*
+cStringToNSString(const char* rawCString) {
+    NSString *ourNSString = [NSString stringWithUTF8String:rawCString];
 
+    return ourNSString;
+}

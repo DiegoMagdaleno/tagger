@@ -15,6 +15,8 @@ func NSStringToCString(s *C.NSString) *C.char { return C.NSStringToCString(s) }
 // NSStringToGoString handles the conversion from NSString to our own GoString session
 func NSStringToGoString(s *C.NSString) string { return C.GoString(NSStringToCString(s)) }
 
+func GoStringToNSString(s string) *C.NSString { return C.cStringToNSString(C.CString(s)) }
+
 // GoInt handles the conversion from NSNumber to Go's int
 func GoInt(i *C.NSNumber) int { return int(C.NSNumberToInt(i)) }
 
@@ -87,5 +89,5 @@ func GoArrayWithFilePropertyObjects(arr *C.NSArray) []FileProperties {
 }
 
 func GetFinalArrayOfFiles(path string) []FileProperties {
-	return GoArrayWithFilePropertyObjects(C.getTagsOfFile(C.CString(path)))
+	return GoArrayWithFilePropertyObjects(C.getTagsOfFile(GoStringToNSString(path)))
 }
