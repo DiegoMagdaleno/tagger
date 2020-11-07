@@ -9,6 +9,7 @@
 #include "bridge.h"
 #include "libtags/FileProperties.h"
 #include "libtags/TagComponents.h"
+#include "libtags/TagManager.h"
 // TFFileProperties represents an struct of the file properties
 typedef struct _TGFileProperties {
     NSString *name;
@@ -74,4 +75,22 @@ cStringToNSString(const char* rawCString) {
     NSString *ourNSString = [NSString stringWithUTF8String:rawCString];
 
     return ourNSString;
+}
+
+const NSString* // We use NSStrings to return the error string, so we can convert it to a Go error object, if this is not nil
+removeTagsForFile(const char* rawTagName, const char* rawPath) {
+    NSString *tagName = [NSString stringWithUTF8String:rawTagName];
+    NSString *path = [NSString stringWithUTF8String:rawPath];
+
+    NSURL *url = [NSURL fileURLWithPath:path];
+
+    NSError *ourError = nil;
+
+    BOOL success = [url RemoveTag:tagName returningError:&ourError];
+
+    if (ourError != nil) {
+        return [ourError localizedFailureReason];
+    }
+
+    return NULL;
 }

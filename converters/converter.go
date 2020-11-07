@@ -7,7 +7,10 @@ package converters
 // #include <libtags/GetHelpers.h>
 // #include <libtags/TagComponents.h>
 import "C"
-import "unsafe"
+import (
+	"errors"
+	"unsafe"
+)
 
 // NSStringToCString handles the conversion from an NSString object to a CString variable.
 func NSStringToCString(s *C.NSString) *C.char { return C.NSStringToCString(s) }
@@ -75,6 +78,14 @@ func fromTGFilePropertiesToFileProperties(filePropertiesPtr *C.FileProperties) F
 	return filePropertiesGo
 }
 
+func NSErrorlocalizedDescriptionToGoError(localDesc *C.NSString) error {
+	errorString := NSStringToGoString(localDesc)
+	if errorString != "" {
+		return errors.New(errorString)
+	}
+	return nil
+}
+
 // GoArrayWithFilePropertyObjects translates the returned array from Obj-C to a Go array containing our fileProperties objects
 func GoArrayWithFilePropertyObjects(arr *C.NSArray) []FileProperties {
 	var files []FileProperties
@@ -90,4 +101,12 @@ func GoArrayWithFilePropertyObjects(arr *C.NSArray) []FileProperties {
 
 func GetFinalArrayOfFiles(path string) []FileProperties {
 	return GoArrayWithFilePropertyObjects(C.getTagsOfFile(GoStringToNSString(path)))
+}
+
+func RemoveTag(tag string, path string) error {
+
+	success := NSErrorlocalizedDescriptionToGoError(C.removeTagsForFile(C.CString(tag), C.CString(path)))
+
+	return success
+
 }
