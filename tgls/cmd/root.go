@@ -7,7 +7,7 @@ import (
 
 	"github.com/diegomagdaleno/tagger/converters"
 
-	"github.com/diegomagdaleno/tagger/lib"
+	"github.com/diegomagdaleno/tagger/tgls/lib"
 
 	"github.com/spf13/cobra"
 )
