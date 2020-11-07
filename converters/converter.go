@@ -110,3 +110,9 @@ func RemoveTag(tag string, path string) error {
 	return success
 
 }
+
+func AddTag(tag string, path string) error {
+	success := NSErrorlocalizedDescriptionToGoError(C.addTagsToFile(C.CString(tag), C.CString(path)))
+
+	return success
+}

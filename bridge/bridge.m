@@ -94,3 +94,22 @@ removeTagsForFile(const char* rawTagName, const char* rawPath) {
 
     return NULL;
 }
+
+const NSString*
+addTagsToFile(const char* rawTagName, const char* rawPath) {
+    NSString *tagName = [NSString stringWithUTF8String:rawTagName];
+    NSString *path = [NSString stringWithUTF8String:rawPath];
+
+    NSURL *url = [NSURL fileURLWithPath:path];
+
+    NSError *ourError = nil;
+
+    BOOL success = [url AddTag:tagName returningError:&ourError];
+
+    if (ourError != nil) {
+        return [ourError localizedFailureReason];
+    }
+
+    return NULL;
+
+}
